@@ -3,7 +3,7 @@
  * @package Import_Users_from_CSV
  */
 /*
-Plugin Name: Import Users from CSV
+Plugin Name: Import Users from CSV for zmdjyg
 Plugin URI: http://wordpress.org/extend/plugins/import-users-from-csv/
 Description: Import Users data and metadata from a csv file.
 Version: 1.0.0
@@ -304,8 +304,17 @@ class IS_IU_Import_Users {
 
 				if ( $update )
 					$user_id = wp_update_user( $userdata );
-				else
+				else{
 					$user_id = wp_insert_user( $userdata );
+          if(is_multisite()){
+            //生成用户子论坛
+            $weblog_title = $userdata['display_name'].'的博客';
+            $domain = $userdata['user_login'].'.blog.zmdjyy.net';
+            $path = "/";
+            $blog_id = create_empty_blog($domain,$path,$weblog_title);
+            add_user_to_blog($blog_id,$user_id,'administrator');
+          }
+        }
 
 				// Is there an error o_O?
 				if ( is_wp_error( $user_id ) ) {
