@@ -312,10 +312,10 @@ class IS_IU_Import_Users {
             $weblog_title = $userdata['display_name'].'的博客';
             $domain = $userdata['user_login'].'.blog.zmdjyy.net';
             $path = "/";
-            #$blog_id = create_empty_blog($domain,$path,$weblog_title);
-            #add_user_to_blog($blog_id,$user_id,'administrator');
+            $blog_id = create_empty_blog($domain,$path,$weblog_title);
+            add_user_to_blog($blog_id,$user_id,'administrator');
 
-            $blog_id = wpmu_create_blog($domain,$path,$weblog_title,$user_id);
+            #$blog_id = wpmu_create_blog($domain,$path,$weblog_title,$user_id);
 
             $wpdb->set_blog_id($blog_id);
             //设置菜单
