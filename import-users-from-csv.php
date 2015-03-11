@@ -312,8 +312,10 @@ class IS_IU_Import_Users {
             $weblog_title = $userdata['display_name'].'的博客';
             $domain = $userdata['user_login'].'.blog.zmdjyy.net';
             $path = "/";
-            $blog_id = create_empty_blog($domain,$path,$weblog_title);
-            add_user_to_blog($blog_id,$user_id,'administrator');
+            #$blog_id = create_empty_blog($domain,$path,$weblog_title);
+            #add_user_to_blog($blog_id,$user_id,'administrator');
+
+            $blog_id = wpmu_create_blog($domain,$path,$weblog_title,$user_id);
 
             $wpdb->set_blog_id($blog_id);
             //设置菜单
@@ -352,14 +354,14 @@ class IS_IU_Import_Users {
                   'parent' => 0,
                   'description' => $v
                 ));
-              };
-              if($menu_id > 0 ){
+               if($menu_id > 0 ){
                 wp_update_nav_menu_item($menu_id, 0, array(
                   'menu-item-title' =>  $v,
                   'menu-item-url' => get_category_link($cat_id),
                   'menu-item-status' => 'publish'));
-              }
+               }
 
+              };
             }
 
           }
