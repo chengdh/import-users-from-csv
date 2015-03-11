@@ -316,20 +316,6 @@ class IS_IU_Import_Users {
             add_user_to_blog($blog_id,$user_id,'administrator');
 
             $wpdb->set_blog_id($blog_id);
-            //设置category
-            //相册/学习进度
-            $cat_array = array("photo" =>'相册',"study" => '学习进度');
-            foreach($cat_array as $k => $v ) {
-              $cat_id = term_exists($v, 'category');
-              if ($cat_id == 0 || $cat_id !== null) {
-               $cat_id = wp_insert_term( $v, 'category',  array(
-                  'slug' =>$k,
-                  'parent' => 0,
-                  'description' => $v
-                ));
-              };
-            }
-            /*
             //设置菜单
             //首页 相册 学习进度 教育培训系统
             // Check if the menu exists
@@ -337,6 +323,7 @@ class IS_IU_Import_Users {
             $menu_exists = wp_get_nav_menu_object( $menu_name );
 
             // If it doesn't exist, let's create it.
+            $menu_id = -1;
             if( !$menu_exists){
               $menu_id = wp_create_nav_menu($menu_name);
 
@@ -352,7 +339,28 @@ class IS_IU_Import_Users {
                 'menu-item-url' => 'http://px.zmdjyy.net', 
                 'menu-item-status' => 'publish'));
             }
-             */
+
+
+            //设置category
+            //相册/学习进度
+            $cat_array = array("photo" =>'相册',"study" => '学习进度');
+            foreach($cat_array as $k => $v ) {
+              $cat_id = term_exists($v, 'category');
+              if ($cat_id == 0 || $cat_id !== null) {
+               $cat_id = wp_insert_term( $v, 'category',  array(
+                  'slug' =>$k,
+                  'parent' => 0,
+                  'description' => $v
+                ));
+              };
+              if($menu_id > 0 ){
+                wp_update_nav_menu_item($menu_id, 0, array(
+                  'menu-item-title' =>  $v,
+                  'menu-item-url' => get_category_link($cat_id),
+                  'menu-item-status' => 'publish'));
+              }
+
+            }
 
           }
         }
