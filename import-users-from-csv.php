@@ -307,12 +307,53 @@ class IS_IU_Import_Users {
 				else{
 					$user_id = wp_insert_user( $userdata );
           if(is_multisite()){
+            global $wpdb;
             //生成用户子论坛
             $weblog_title = $userdata['display_name'].'的博客';
             $domain = $userdata['user_login'].'.blog.zmdjyy.net';
             $path = "/";
             $blog_id = create_empty_blog($domain,$path,$weblog_title);
             add_user_to_blog($blog_id,$user_id,'administrator');
+
+            $wpdb->set_blog_id($blog_id);
+            //设置category
+            //相册/学习进度
+            $cat_array = array("photo" =>'相册',"study" => '学习进度');
+            foreach($cat_array as $k => $v ) {
+              $cat_id = term_exists($v, 'category');
+              if ($cat_id == 0 || $cat_id !== null) {
+               $cat_id = wp_insert_term( $v, 'category',  array(
+                  'slug' =>$k,
+                  'parent' => 0,
+                  'description' => $v
+                ));
+              };
+            }
+            /*
+            //设置菜单
+            //首页 相册 学习进度 教育培训系统
+            // Check if the menu exists
+            $menu_name = "wp_custom_nav";
+            $menu_exists = wp_get_nav_menu_object( $menu_name );
+
+            // If it doesn't exist, let's create it.
+            if( !$menu_exists){
+              $menu_id = wp_create_nav_menu($menu_name);
+
+              // Set up default menu items
+              wp_update_nav_menu_item($menu_id, 0, array(
+                'menu-item-title' =>  '首页',
+                'menu-item-classes' => 'home',
+                'menu-item-url' => 'http://www.zmdjyy.net',
+                'menu-item-status' => 'publish'));
+
+              wp_update_nav_menu_item($menu_id, 0, array(
+                'menu-item-title' =>  "教育培训",
+                'menu-item-url' => 'http://px.zmdjyy.net', 
+                'menu-item-status' => 'publish'));
+            }
+             */
+
           }
         }
 
