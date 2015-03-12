@@ -305,12 +305,16 @@ class IS_IU_Import_Users {
 				if ( $update )
 					$user_id = wp_update_user( $userdata );
 				else{
+
+          //没人密码取出生年月日
+					$userdata['user_pass'] = substr($userdata['user_login'],6,8);
 					$user_id = wp_insert_user( $userdata );
           if(is_multisite()){
             global $wpdb;
             //生成用户子论坛
             $weblog_title = $userdata['display_name'].'的博客';
-            $domain = $userdata['user_login'].'.blog.zmdjyy.net';
+            $domain = $usermeta['subdomain'].'.mydomain.com:8000';
+            #$domain = 's1.mydomain.com:8000';
             $path = "/";
             $blog_id = create_empty_blog($domain,$path,$weblog_title);
             add_user_to_blog($blog_id,$user_id,'administrator');
@@ -328,6 +332,11 @@ class IS_IU_Import_Users {
             $menu_id = -1;
             if( !$menu_exists){
               $menu_id = wp_create_nav_menu($menu_name);
+              //更新theme的menu位置
+              $menu = get_term_by('name', $menu_name, 'nav_menu' );
+              $locations = get_theme_mod('nav_menu_locations');
+              $locations['primary'] = $menu->term_id;
+              set_theme_mod('nav_menu_locations', $locations );
 
               // Set up default menu items
               wp_update_nav_menu_item($menu_id, 0, array(
@@ -340,12 +349,18 @@ class IS_IU_Import_Users {
                 'menu-item-title' =>  "教育培训",
                 'menu-item-url' => 'http://px.zmdjyy.net', 
                 'menu-item-status' => 'publish'));
+
+              wp_update_nav_menu_item($menu_id, 0, array(
+                'menu-item-title' =>  "校本研修",
+                'menu-item-url' => 'http://xbyx.zmdjyy.net', 
+                'menu-item-status' => 'publish'));
+
             }
 
 
             //设置category
             //相册/学习进度
-            $cat_array = array("photo" =>'相册',"study" => '学习进度');
+            $cat_array = array("photo" =>'相册',"study" => '教学研究');
             foreach($cat_array as $k => $v ) {
               $cat_id = term_exists($v, 'category');
               if ($cat_id == 0 || $cat_id !== null) {
@@ -360,10 +375,8 @@ class IS_IU_Import_Users {
                   'menu-item-url' => get_category_link($cat_id),
                   'menu-item-status' => 'publish'));
                }
-
-              };
+              }
             }
-
           }
         }
 
