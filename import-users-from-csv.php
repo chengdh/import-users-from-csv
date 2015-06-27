@@ -313,7 +313,7 @@ class IS_IU_Import_Users {
             global $wpdb;
             //生成用户子论坛
             $weblog_title = $userdata['display_name'].'的博客';
-            $weblog_title = '我的博客';
+            #$weblog_title = '我的博客';
             $domain = $usermeta['subdomain'].'.blog.zmdjyy.net';
             #$domain = 's1.mydomain.com:8000';
             $path = "/";
