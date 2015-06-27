@@ -313,13 +313,14 @@ class IS_IU_Import_Users {
             global $wpdb;
             //生成用户子论坛
             $weblog_title = $userdata['display_name'].'的博客';
+            $weblog_title = '我的博客';
             $domain = $usermeta['subdomain'].'.blog.zmdjyy.net';
             #$domain = 's1.mydomain.com:8000';
             $path = "/";
-            $blog_id = create_empty_blog($domain,$path,$weblog_title);
-            add_user_to_blog($blog_id,$user_id,'administrator');
+            #$blog_id = create_empty_blog($domain,$path,$weblog_title);
+            #add_user_to_blog($blog_id,$user_id,'administrator');
 
-            #$blog_id = wpmu_create_blog($domain,$path,$weblog_title,$user_id);
+            $blog_id = wpmu_create_blog($domain,$path,$weblog_title,$user_id);
 
             $wpdb->set_blog_id($blog_id);
             //设置菜单
