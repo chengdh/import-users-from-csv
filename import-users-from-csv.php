@@ -308,6 +308,7 @@ class IS_IU_Import_Users {
 
           //每人密码取出年月日
 					$userdata['user_pass'] = substr($userdata['user_login'],6,8);
+					$userdata['nickname'] = $userdata['display_name'];
 					$user_id = wp_insert_user( $userdata );
           if(is_multisite()){
             global $wpdb;
