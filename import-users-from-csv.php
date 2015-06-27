@@ -306,7 +306,7 @@ class IS_IU_Import_Users {
 					$user_id = wp_update_user( $userdata );
 				else{
 
-          //没人密码取出生年月日
+          //每人密码取出年月日
 					$userdata['user_pass'] = substr($userdata['user_login'],6,8);
 					$user_id = wp_insert_user( $userdata );
           if(is_multisite()){
@@ -356,7 +356,6 @@ class IS_IU_Import_Users {
                 'menu-item-status' => 'publish'));
 
             }
-
 
             //设置category
             //相册/学习进度
